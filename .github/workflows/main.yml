@@ -15,10 +15,15 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Configurar Java
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: 17
+
+    - name: Verificar Java
+      run: |
+        java -version
+        echo $JAVA_HOME
 
     - name: Dar permisos Maven
       run: chmod +x mvnw
@@ -32,6 +37,12 @@ jobs:
     - name: Build proyecto
       run: ./mvnw clean package -DskipTests
 
+    - name: Verificar Maven
+      run: ./mvnw -version
+    - name: Instalar Snyk
+      run: npm install -g snyk
+    
+    - name: Autenticar Snyk
     - name: Ejecutar análisis Snyk
       uses: snyk/actions/maven@master
       env:
