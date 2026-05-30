@@ -1,4 +1,3 @@
-version: '3.8'
 services: 
   app:
 
@@ -16,9 +15,4 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-  java:
-   build:
-    context:
-    dockerfile: dockerfile
-  ports:
-   - "8080;8080"
+  
