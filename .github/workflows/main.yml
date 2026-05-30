@@ -39,15 +39,16 @@ jobs:
 
     - name: Verificar Maven
       run: ./mvnw -version
-    - name: Instalar Snyk
-      run: npm install -g snyk
     
-    - name: Autenticar Snyk
-    - name: Ejecutar análisis Snyk
-      uses: snyk/actions/maven@master
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    - name: Instalar Snyk
+      run: npm install -g snyk      
 
+    - name: Autenticar Snyk
+      run: snyk auth ${{ secrets.SNYK_TOKEN }}
+
+    - name: Ejecutar analisis snyk
+      run: snyk test --file=pom.xml
+        
     - name: Generar reporte JSON Snyk
       if: always()
       run: |
