@@ -30,6 +30,29 @@ jobs:
       - name: Build proyecto
         run: ./mvnw clean package
 
+      - name: Authenticate Synk CLI
+        uses: snyk/actions/maven/@master
+        env:
+         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Token guardado en Github secrets
+        run: snyk auth $SNYK_TOKEN
+
+      - name: Synk test java dependencies
+        run: snyk test --severity_threshold=high #analiza vulnerabilidades
+
+      - name; Generate Synk JSON Report
+       if: always:()
+        run: |
+         echo "Generando reporte JSON de Synk..."
+         snyk test --json > snyk-report.json || echo "Fallo snyk test pero se continua"
+         ls -lh snyk-report.json || echo "No se genero el reporte"
+
+      - name: Upload Synk JSON Report
+       if always()
+        uses: actions/upload-artifact@v4
+        with:
+         name: snyk-report
+         path: snyk-report.json
+
       - name: Build Docker
         run: docker build -t ms-gestionusuarios .
 
@@ -38,3 +61,5 @@ jobs:
         with:
           name: app
           path: target/*.jar
+
+   
