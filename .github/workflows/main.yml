@@ -1,59 +1,59 @@
 name: Pipeline CI-CD
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+    - main
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Clonar repositorio
-    uses: actions/checkout@v4
 
-  - name: Configurar Java
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: 17
+    steps:
+    - name: Clonar repositorio
+      uses: actions/checkout@v4
 
-  - name: Dar permisos Maven
-    run: chmod +x mvnw
+    - name: Configurar Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: 17
 
-  - name: Ejecutar tests
-    run: ./mvnw clean test
+    - name: Dar permisos Maven
+      run: chmod +x mvnw
 
-  - name: Generar reporte JaCoCo
-    run: ./mvnw jacoco:report
+    - name: Ejecutar tests
+      run: ./mvnw clean test
 
-  - name: Build proyecto
-    run: ./mvnw clean package -DskipTests
+    - name: Generar reporte JaCoCo
+      run: ./mvnw jacoco:report
 
-  - name: Ejecutar análisis Snyk
-    uses: snyk/actions/maven@master
-    env:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    - name: Build proyecto
+      run: ./mvnw clean package -DskipTests
 
-  - name: Generar reporte JSON Snyk
-    if: always()
-    run: |
-      snyk test --json > snyk-report.json || echo "Snyk encontró vulnerabilidades"
+    - name: Ejecutar análisis Snyk
+      uses: snyk/actions/maven@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-  - name: Subir reporte Snyk
-    if: always()
-    uses: actions/upload-artifact@v4
-    with:
-      name: snyk-report
-      path: snyk-report.json
+    - name: Generar reporte JSON Snyk
+      if: always()
+      run: |
+        snyk test --json > snyk-report.json || echo "Snyk encontró vulnerabilidades"
 
-  - name: Build Docker
-    run: docker build -t ms-gestionusuarios .
+    - name: Subir reporte Snyk
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: snyk-report
+        path: snyk-report.json
 
-  - name: Upload artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: app
-      path: target/*.jar
+    - name: Build Docker
+      run: docker build -t ms-gestionusuarios .
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app
+        path: target/*.jar
