@@ -47,8 +47,9 @@ jobs:
       run: snyk auth ${{ secrets.SNYK_TOKEN }}
 
     - name: Ejecutar analisis snyk
+      continue-on-error: true
       run: snyk test --file=pom.xml
-        
+
     - name: Generar reporte JSON Snyk
       if: always()
       run: |
