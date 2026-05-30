@@ -1,15 +1,14 @@
 name: Pipeline CI-CD
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+    - main
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-```
 steps:
   - name: Clonar repositorio
     uses: actions/checkout@v4
