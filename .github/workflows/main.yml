@@ -22,13 +22,13 @@ jobs:
         run: chmod +x mvnw
 
       - name: Ejecutar tests
-        run: ./mvnw test
+        run: ./mvnw clean test
 
       - name: Generar reporte jacoco
         run: ./mvnw jacoco:report
 
       - name: Build proyecto
-        run: ./mvnw clean package
+        run: ./mvnw clean package -DskipTests
 
       - name: Authenticate Synk CLI
         uses: snyk/actions/maven/@master
