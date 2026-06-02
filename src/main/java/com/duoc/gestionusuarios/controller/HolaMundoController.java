@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class HolaMundoController {
     @GetMapping("/")
     public String hola() {
-        return "Hola Mundo desde Spring Boot!";
+        return "Hola Mundo desde Spring Boot! v2";
     }
 }
