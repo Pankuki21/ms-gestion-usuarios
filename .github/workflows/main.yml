@@ -65,6 +65,12 @@ jobs:
     - name: Build Docker
       run: docker build -t ms-gestionusuarios .
 
+    - name: Deploy application
+      run: docker compose up -d
+
+    - name: Verificar contenedores
+      run: docker ps
+
     - name: Validar Docker Compose
       run: docker compose config
       
